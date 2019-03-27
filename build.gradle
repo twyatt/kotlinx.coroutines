@@ -25,10 +25,15 @@ static def platformOf(project) {
 buildscript {
     ext.publishSnapshotTrain = rootProject.properties['publishSnapshotTrain'] != null
 
-    repositories {
-        if (publishSnapshotTrain) {
+    if (publishSnapshotTrain) {
+        ext.kotlin_version = '1.3-SNAPSHOT'
+        repositories {
+            maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
             mavenLocal()
         }
+    }
+
+    repositories {
         jcenter()
         maven { url "https://kotlin.bintray.com/kotlinx" }
         maven { url "https://kotlin.bintray.com/kotlin-dev" }
@@ -55,10 +60,20 @@ buildscript {
 allprojects {
     // the only place where HostManager could be instantiated
     project.ext.hostManager = new HostManager()
+
+
+    if (publishSnapshotTrain) {
+        println "Using $kotlin_version for snapshot publication of $name"
+    }
 }
 
 allprojects {
     apply plugin: 'kotlinx-atomicfu'
+
+    if (useKotlinSnapshot && rootProject.properties['kotlinVersion'] != null) {
+        kotlin_version = rootProject.properties['kotlinVersion']
+        println "Using $kotlin_version for snapshot publication"
+    }
 
     def deployVersion = properties['DeployVersion']
     if (deployVersion != null) version = deployVersion
