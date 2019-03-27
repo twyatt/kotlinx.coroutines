@@ -23,14 +23,12 @@ static def platformOf(project) {
 }
 
 buildscript {
-    ext.useKotlinSnapshot = rootProject.properties['kotlinSnapshot'] != null
-    if (useKotlinSnapshot) {
-        ext.kotlin_version = '1.2-SNAPSHOT'
-        repositories {
-            maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-        }
-    }
+    ext.publishSnapshotTrain = rootProject.properties['publishSnapshotTrain'] != null
+
     repositories {
+        if (publishSnapshotTrain) {
+            mavenLocal()
+        }
         jcenter()
         maven { url "https://kotlin.bintray.com/kotlinx" }
         maven { url "https://kotlin.bintray.com/kotlin-dev" }
@@ -64,9 +62,6 @@ allprojects {
 
     def deployVersion = properties['DeployVersion']
     if (deployVersion != null) version = deployVersion
-    if (useKotlinSnapshot) {
-        kotlin_version = '1.2-SNAPSHOT'
-    }
 
     def projectName = it.name
     repositories {
@@ -76,6 +71,9 @@ allprojects {
          */
         if (projectName == "kotlinx-coroutines-play-services") {
             google()
+        }
+        if (publishSnapshotTrain) {
+            mavenLocal()
         }
         jcenter()
         maven { url "https://kotlin.bintray.com/kotlin-dev" }
