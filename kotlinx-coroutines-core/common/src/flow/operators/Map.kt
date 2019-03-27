@@ -7,4 +7,4 @@ import kotlinx.coroutines.flow.*
  *
  * TODO this method will be inline as soon as all bugs in crossinliner will be fixed
  */
-public inline fun <T : Any, R : Any> Flow<T>.map(crossinline transformer: suspend (value: T) -> R): Flow<R> = transform { value -> emit(transformer(value)) }
+public fun <T : Any, R : Any> Flow<T>.map(transformer: suspend (value: T) -> R): Flow<R> = transform { value -> emit(transformer(value)) }

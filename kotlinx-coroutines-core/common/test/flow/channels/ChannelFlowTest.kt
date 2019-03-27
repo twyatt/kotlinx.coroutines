@@ -2,7 +2,7 @@
  * Copyright 2016-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license.
  */
 
-package flow.channels
+package kotlinx.coroutines.flow.channels
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*

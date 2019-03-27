@@ -63,7 +63,7 @@ public fun <T : Any> Flow<T>.retry(
     }
 }
 
-private inline fun <T : Any> Flow<T>.collectSafely(crossinline onException: suspend FlowCollector<T>.(Throwable) -> Unit): Flow<T> =
+private fun <T : Any> Flow<T>.collectSafely(onException: suspend FlowCollector<T>.(Throwable) -> Unit): Flow<T> =
     flow {
         // Note that exception may come from the downstream operators, we should not switch on that
         var fromDownstream = false
