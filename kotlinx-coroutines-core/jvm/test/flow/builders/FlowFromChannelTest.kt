@@ -34,7 +34,7 @@ class FlowFromChannelTest : TestBase() {
         }
     }
 
-    @Test
+    @Test(timeout = 5_000L)
     fun testThrowingConsumer() = runTest {
         var i = 0
         val api = CallbackApi {
@@ -69,13 +69,12 @@ class FlowFromChannelTest : TestBase() {
         assertEquals(1, receivedConsensus)
         assertTrue(isDone)
         assertTrue { exception is RuntimeException }
-
+        api.thread.join()
         assertTrue(api.started)
         assertTrue(api.stopped)
-        api.thread.join()
     }
 
-    @Test
+    @Test(timeout = 5_000L)
     fun testThrowingSource() = runBlocking {
         var i = 0
         val api = CallbackApi {
@@ -105,9 +104,8 @@ class FlowFromChannelTest : TestBase() {
         job.join()
         assertTrue(isDone)
         assertTrue { exception is RuntimeException }
-
+        api.thread.join()
         assertTrue(api.started)
         assertTrue(api.stopped)
-        api.thread.join()
     }
 }

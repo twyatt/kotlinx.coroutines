@@ -70,7 +70,6 @@ class ConcatenateMapTest : TestBase() {
     }
 
     @Test
-    @Ignore // K/N fails here
     fun testFailureInMapOperation() = runTest {
         val latch = Channel<Unit>()
         val flow = flow {
@@ -87,6 +86,7 @@ class ConcatenateMapTest : TestBase() {
             latch.receive()
             expect(2)
             throw TestException()
+            flowOf<Int>() // Workaround for KT-30642, return type should not be Nothing
         }
 
         assertFailsWith<TestException>(flow.count())

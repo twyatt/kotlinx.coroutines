@@ -28,7 +28,6 @@ class ReduceTest : TestBase() {
     }
 
     @Test
-    @Ignore // K/N fails here
     fun testErrorCancelsUpstream() = runTest {
         val latch = Channel<Unit>()
         val flow = flow {
@@ -50,6 +49,7 @@ class ReduceTest : TestBase() {
                 latch.receive()
                 expect(4)
                 throw TestException()
+                42 // Workaround for KT-30642, return type should not be Nothing
             }
         }
         finish(6)
