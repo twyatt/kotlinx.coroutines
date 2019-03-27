@@ -60,24 +60,12 @@ buildscript {
 allprojects {
     // the only place where HostManager could be instantiated
     project.ext.hostManager = new HostManager()
-
-
-    if (publishSnapshotTrain) {
-        println "Using $kotlin_version for snapshot publication of $name"
-    }
+    def deployVersion = properties['DeployVersion']
+    if (deployVersion != null) version = deployVersion
 }
 
 allprojects {
     apply plugin: 'kotlinx-atomicfu'
-
-    if (useKotlinSnapshot && rootProject.properties['kotlinVersion'] != null) {
-        kotlin_version = rootProject.properties['kotlinVersion']
-        println "Using $kotlin_version for snapshot publication"
-    }
-
-    def deployVersion = properties['DeployVersion']
-    if (deployVersion != null) version = deployVersion
-
     def projectName = it.name
     repositories {
         /*
@@ -88,6 +76,7 @@ allprojects {
             google()
         }
         if (publishSnapshotTrain) {
+            maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
             mavenLocal()
         }
         jcenter()
