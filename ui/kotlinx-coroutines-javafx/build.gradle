@@ -14,13 +14,13 @@ javafx {
 
 task checkJdk8() {
     // only fail w/o JDK_18 when actually trying to test, not during project setup phase
-    doLast {
-        if (!System.env.JDK_18) {
-            throw new GradleException("JDK_18 environment variable is not defined. " +
-                    "Can't run JDK 8 compatibility tests. " +
-                    "Please ensure JDK 8 is installed and that JDK_18 points to it.")
-        }
-    }
+    // doLast {
+    //     if (!System.env.JDK_18) {
+    //         throw new GradleException("JDK_18 environment variable is not defined. " +
+    //                 "Can't run JDK 8 compatibility tests. " +
+    //                 "Please ensure JDK 8 is installed and that JDK_18 points to it.")
+    //     }
+    // }
 }
 
 task jdk8Test(type: Test, dependsOn: [compileTestKotlin, checkJdk8]) {
@@ -31,4 +31,4 @@ task jdk8Test(type: Test, dependsOn: [compileTestKotlin, checkJdk8]) {
 
 // Run these tests only during nightly stress test
 jdk8Test.onlyIf { project.properties['stressTest'] != null }
-build.dependsOn jdk8Test
+//build.dependsOn jdk8Test
